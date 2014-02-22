@@ -14,7 +14,7 @@
 	</script>
 
 	<script type="text/javascript"
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBi-5W95aAeVGEgiJbXlnH08lrZ9yle7uY&amp;sensor=false">
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBi-5W95aAeVGEgiJbXlnH08lrZ9yle7uY&amp;sensor=false&amp;v=3&amp;region=LT">
 	</script>
 
 	<?= stylesheet_link_tag() ?>
