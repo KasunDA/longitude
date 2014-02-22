@@ -27,7 +27,28 @@ class UserController extends BaseController {
 	}
 
 	public function showLogin() {
-		return View::make('login');
+		$incorrectLogin = Session::has('incorrect_login');
+
+		return View::make('login', array(
+			'incorrectLogin' => $incorrectLogin
+		));
+	}
+
+	public function handleLogin() {
+		$userData = array(
+			'username' => Input::get('username'),
+			'password' => Input::get('password')
+		);
+
+		if (Auth::attempt($userData)) {
+			return Redirect::to('dashboard')
+				->with('flash_message', 'You are now logged in!')
+				->with('flash_type', 'success');
+		} else {
+			return Redirect::to('users/login')
+				->with('incorrect_login', true)
+				->withInput();
+		}
 	}
 
 }
