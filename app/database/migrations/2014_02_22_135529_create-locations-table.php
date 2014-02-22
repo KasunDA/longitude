@@ -18,7 +18,7 @@ class CreateLocationsTable extends Migration {
 			$table->foreign('user_id')->references('id')->on('users');
 			$table->double('latitude', 10, 6);
 			$table->double('longitude', 10, 6);
-			$table->timestamp('registered_at');
+			$table->timestamps();
 		});
 	}
 
@@ -29,7 +29,7 @@ class CreateLocationsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('location');
+		Schema::drop('locations');
 	}
 
 }
