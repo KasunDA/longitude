@@ -16,13 +16,22 @@
 	<?= stylesheet_link_tag() ?>
 	<?= javascript_include_tag() ?>
 </head>
-<body>
-	@include('partials.navigation')
-	@include('partials.alerts_big')
+<body class="form">
+	<div class="form-container">
+		@include('partials.alerts_small')
 
-	@yield('content')
+		<div class="card">
+			<h2>
+				@section('title')
+					Pizzasys
+				@show
+			</h2>
 
-	<div class="container">
+			<hr />
+
+			@yield('content')
+		</div>
+
 		@include('partials.footer')
 	</div>
 </body>

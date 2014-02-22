@@ -11,10 +11,11 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
-
 Route::get('/', array('uses' => 'HomeController@showIndex',
 	'as' => 'index'));
+
+Route::get('users/register', array('uses' => 'UserController@showRegistration',
+	'as' => 'user.register'));
+
+Route::post('users/create', array('uses' => 'UserController@handleRegistration',
+	'as' => 'user.create'));
