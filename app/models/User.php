@@ -5,6 +5,12 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 
 class User extends Eloquent implements UserInterface, RemindableInterface {
 
+	public static $rules = array(
+		'username'              => 'required|alpha|between:4,16|unique:users',
+		'password'              => 'required|between:8,128|confirmed',
+		'password_confirmation' => 'required'
+	);
+
 	/**
 	 * The database table used by the model.
 	 *
@@ -47,6 +53,17 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	public function getReminderEmail()
 	{
 		return $this->email;
+	}
+
+	/**
+	 * Model associations
+	 */
+	public function userType() {
+		return $this->belongsTo('UserType');
+	}
+
+	public function locations() {
+		return $this->hasMany('Location');
 	}
 
 }
