@@ -41,14 +41,19 @@ class UserController extends BaseController {
 		);
 
 		if (Auth::attempt($userData)) {
-			return Redirect::to('dashboard')
+			return Redirect::route('dashboard')
 				->with('flash_message', 'You are now logged in!')
 				->with('flash_type', 'success');
 		} else {
-			return Redirect::to('users/login')
+			return Redirect::route('users.login')
 				->with('incorrect_login', true)
 				->withInput();
 		}
+	}
+
+	public function handleLogout() {
+		Auth::logout();
+		return Redirect::route('index');
 	}
 
 }

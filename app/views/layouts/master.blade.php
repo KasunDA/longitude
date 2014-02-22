@@ -3,7 +3,7 @@
 <head>
 	<title>
 		@section('title')
-			Pizzasys
+			Longitude
 		@show
 	</title>
 
@@ -21,9 +21,5 @@
 	@include('partials.alerts_big')
 
 	@yield('content')
-
-	<div class="container">
-		@include('partials.footer')
-	</div>
 </body>
 </html>
