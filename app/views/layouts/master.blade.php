@@ -13,6 +13,10 @@
 		var BASE_URL = '{{ url("/") }}';
 	</script>
 
+	<script type="text/javascript"
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBi-5W95aAeVGEgiJbXlnH08lrZ9yle7uY&amp;sensor=false">
+	</script>
+
 	<?= stylesheet_link_tag() ?>
 	<?= javascript_include_tag() ?>
 </head>

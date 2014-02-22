@@ -6,6 +6,6 @@
 
 @section('content')
 
-Dashboard!
+<div id="map-canvas"></div>
 
 @stop

@@ -9,10 +9,10 @@
 // but before any files alphabetically greater than 'application.js' 
 //
 // The available directives right now are require, require_directory, and require_tree
-// 	
+//
 // Libraries:
 //= require jquery
 //= require bootstrap
 //
 // Longitude javascripts:
-//
+//= require_tree .
