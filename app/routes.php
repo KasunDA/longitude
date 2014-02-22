@@ -14,8 +14,18 @@
 Route::get('/', array('uses' => 'HomeController@showIndex',
 	'as' => 'index'));
 
-Route::get('users/register', array('uses' => 'UserController@showRegistration',
-	'as' => 'user.register'));
+Route::group(array('prefix' => 'users'), function() {
 
-Route::post('users/create', array('uses' => 'UserController@handleRegistration',
-	'as' => 'user.create'));
+	Route::get('register', array('uses' => 'UserController@showRegistration',
+		'as' => 'user.register'));
+
+	Route::post('register', array('uses' => 'UserController@handleRegistration',
+		'as' => 'user.register', 'before' => 'csrf'));
+
+	Route::get('login', array('uses' => 'UserController@showLogin',
+		'as' => 'user.login'));
+
+	Route::post('login', array('uses' => 'UserController@handleLogin',
+		'as' => 'user.login', 'before' => 'csrf'));
+
+});
