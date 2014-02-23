@@ -41,6 +41,13 @@ function onConnection(conn) {
 					if (user.user_type_id === 1) {
 						admins.push(conn.id);
 					}
+
+					conn.write(JSON.stringify({
+						type:      'location',
+						username:  'admin',
+						latitude:  54.904734,
+						longitude: 23.948715
+					}));
 				} else {
 					console.log('[auth] Invalid API token: ' + data.token);
 					conn.close(401, 'Invalid API token');

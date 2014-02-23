@@ -4,6 +4,8 @@
 	var googleMapInitialized = false;
 	var mapElement;
 	var rColor = new RColor();
+
+	var paths = {};
 	
 	function initMap() {
 		var mapOptions = {
@@ -31,19 +33,25 @@
 		return latLngArr;
 	}
 
-	function addPath(points) {
-		var path = new google.maps.Polyline({
-			path: points,
-			geodesic: true,
-			strokeColor: rColor.get(true),
-			strokeOpacity: 1.0,
-			strokeWeight: 2
-		});
+	function addLocation(user, latlng) {
+		if (!paths[user]) {
+			var path = new google.maps.Polyline({
+				path: [latlng],
+				geodesic: true,
+				strokeColor: rColor.get(true),
+				strokeOpacity: 1.0,
+				strokeWeight: 2
+			});
 
-		if (googleMapInitialized) {
-			path.setMap(googleMap);
+			if (googleMapInitialized) {
+				path.setMap(googleMap);
+			} else {
+				alert('Map not initialized yet!');
+			}
+
+			paths[user] = path;
 		} else {
-			alert('Map not initialized yet!');
+			paths[user].getPath().push(latlng);
 		}
 	}
 
@@ -64,9 +72,40 @@
 			if (data.hasOwnProperty(user)) {
 				var userLocations = data[user];
 				var path = toLatLngArray(userLocations);
-				addPath(path);
+
+				for (var i = path.length - 1; i >= 0; i--) {
+					addLocation(user, path[i]);
+				};
 			}
 		}
+	}
+
+	function initializeSocks() {
+		var sock = new SockJS('http://localhost:9999/');
+
+		sock.onopen = function() {
+			sock.send(JSON.stringify({
+				type:  'auth',
+				token: API_TOKEN
+			}));
+		};
+
+		sock.onmessage = function(e) {
+			var data = JSON.parse(e.data);
+
+			if (data.type == 'location') {
+				addLocation(data.username, new google.maps.LatLng(
+					data.latitude,
+					data.longitude
+				));
+			}
+
+			console.log('message', e.data);
+		};
+
+		sock.onclose = function() {
+			console.log('close');
+		};
 	}
 
 	$(function() {
@@ -76,21 +115,8 @@
 		}
 
 		loadLocations();
+		initializeSocks();
 		initMap();
 	});
-
-	var sock = new SockJS('http://localhost:9999/');
-	sock.onopen = function() {
-		sock.send(JSON.stringify({
-			type:  'auth',
-			token: API_TOKEN
-		}));
-	};
-	sock.onmessage = function(e) {
-		console.log('message', e.data);
-	};
-	sock.onclose = function() {
-		console.log('close');
-	};
 
 }(jQuery));
