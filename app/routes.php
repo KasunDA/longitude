@@ -35,3 +35,10 @@ Route::group(array('prefix' => 'users'), function() {
 		'as' => 'user.logout'));
 
 });
+
+Route::group(array('prefix' => 'api'), function() {
+
+	Route::get('locations', array('uses' => 'ApiController@getLocations',
+		'as' => 'api.locations', 'before' => 'auth'));
+
+});
