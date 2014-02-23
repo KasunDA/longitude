@@ -8,6 +8,8 @@
 
 <div class="container">
 	Hello!
+
+	@include('partials.footer')
 </div>
 
 @stop

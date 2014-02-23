@@ -15,14 +15,17 @@
 			<ul class="nav navbar-nav navbar-right">
 				@if(Auth::check())
 					<li>
-						{{ link_to(route('user.logout'), 'Logout ('.Auth::user()->username.')', []) }}
+						{{ link_to(route('profile'), 'Profile') }}
+					</li>
+					<li>
+						{{ link_to(route('user.logout'), 'Logout ('.Auth::user()->username.')') }}
 					</li>
 				@else
 					<li>
-						{{ link_to(route('user.login'), 'Login', []) }}
+						{{ link_to(route('user.login'), 'Login') }}
 					</li>
 					<li>
-						{{ link_to(route('user.register'), 'Register', []) }}
+						{{ link_to(route('user.register'), 'Register') }}
 					</li>
 				@endif
 			</ul>

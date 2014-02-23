@@ -17,6 +17,9 @@ Route::get('/', array('uses' => 'HomeController@showIndex',
 Route::get('dashboard', array('uses' => 'DashboardController@showDashboard',
 	'as' => 'dashboard', 'before' => 'auth'));
 
+Route::get('profile', array('uses' => 'ProfileController@showProfile',
+	'as' => 'profile', 'before' => 'auth'));
+
 Route::group(array('prefix' => 'users'), function() {
 
 	Route::get('register', array('uses' => 'UserController@showRegistration',
@@ -36,9 +39,19 @@ Route::group(array('prefix' => 'users'), function() {
 
 });
 
-Route::group(array('prefix' => 'api'), function() {
+Route::group(array('prefix' => 'api', 'before' => 'auth'), function() {
 
 	Route::get('locations', array('uses' => 'ApiController@getLocations',
-		'as' => 'api.locations', 'before' => 'auth'));
+		'as' => 'api.locations'));
+
+});
+
+Route::group(array('prefix' => 'tokens'), function() {
+
+	Route::get('new', array('uses' => 'TokenController@newToken',
+		'as' => 'token.new', 'before' => 'auth'));
+
+	Route::get('revoke/{id}', array('uses' => 'TokenController@revokeToken',
+		'as' => 'token.revoke', 'before' => 'auth'));
 
 });
