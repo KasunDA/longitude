@@ -3,6 +3,7 @@
 	var googleMap;
 	var googleMapInitialized = false;
 	var mapElement;
+	var rColor = new RColor();
 	
 	function initMap() {
 		var mapOptions = {
@@ -34,7 +35,7 @@
 		var path = new google.maps.Polyline({
 			path: points,
 			geodesic: true,
-			strokeColor: '#FF0000',
+			strokeColor: rColor.get(true),
 			strokeOpacity: 1.0,
 			strokeWeight: 2
 		});
