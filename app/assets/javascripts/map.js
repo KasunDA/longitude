@@ -1,6 +1,34 @@
-(function (LongitudeMap, $, undefined) {
+(function ($, undefined) {
 
-	var map;
+	var googleMap;
+	var googleMapInitialized = false;
+	var mapElement;
+	
+	function initMap() {
+		var mapOptions = {
+			center: new google.maps.LatLng(54.8941781, 23.9125384),
+			zoom: 13
+		};
+
+		googleMap = new google.maps.Map(
+			mapElement[0],
+			mapOptions
+		);
+
+		googleMapInitialized = true;
+	}
+
+	function toLatLngArray(arr) {
+		var latLngArr = [];
+
+		for (var i = arr.length - 1; i >= 0; i--) {
+			latLngArr.push(new google.maps.LatLng(
+				arr[i].latitude, arr[i].longitude
+			));
+		};
+
+		return latLngArr;
+	}
 
 	function addPath(points) {
 		var path = new google.maps.Polyline({
@@ -11,32 +39,43 @@
 			strokeWeight: 2
 		});
 
-		path.setMap(map);
+		if (googleMapInitialized) {
+			path.setMap(googleMap);
+		} else {
+			alert('Map not initialized yet!');
+		}
 	}
-	
-	function initialize() {
-		var mapOptions = {
-			center: new google.maps.LatLng(54.8941781, 23.9125384),
-			zoom: 13
-		};
 
-		map = new google.maps.Map(
-			document.getElementById("map-canvas"),
-			mapOptions
-		);
+	function loadLocations() {
+		var url = BASE_URL + '/api/locations';
 
-		var flightPlanCoordinates = [
-			new google.maps.LatLng(54.916107, 23.982489),
-			new google.maps.LatLng(54.911765, 23.968370),
-			new google.maps.LatLng(54.912357, 23.958800),
-			new google.maps.LatLng(54.911518, 23.938715)
-		];
+		$.ajax({
+			url:      url,
+			type:     'GET',
+			dataType: 'json'
+		}).done(handleLocationsLoaded);
+	}
 
-		addPath(flightPlanCoordinates);
+	function handleLocationsLoaded(data) {
+		data = data.locations;
+
+		for (var user in data) {
+			if (data.hasOwnProperty(user)) {
+				var userLocations = data[user];
+				var path = toLatLngArray(userLocations);
+				addPath(path);
+			}
+		}
 	}
 
 	$(function() {
-		initialize();
-	})
+		mapElement = $('#map-canvas');
+		if (mapElement.length === 0) {
+			return;
+		}
 
-}(window.LongitudeMap = window.LongitudeMap || {}, jQuery));
+		loadLocations();
+		initMap();
+	});
+
+}(jQuery));
