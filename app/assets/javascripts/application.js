@@ -13,6 +13,7 @@
 // Libraries:
 //= require jquery
 //= require bootstrap
+//= require rcolor
 //
 // Longitude javascripts:
 //= require_tree .
