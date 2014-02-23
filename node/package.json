@@ -1,0 +1,25 @@
+{
+  "name": "longitude",
+  "version": "0.1.0",
+  "description": "A realtime location server for Longitude",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mntnorv/longitude.git"
+  },
+  "keywords": [
+    "longitude"
+  ],
+  "author": "Mantas Norvaiša",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mntnorv/longitude/issues"
+  },
+  "homepage": "https://github.com/mntnorv/longitude",
+  "dependencies": {
+    "sequelize": "~1.7.0"
+  }
+}
