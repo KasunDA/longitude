@@ -9,8 +9,15 @@ class UserTableSeeder extends Seeder {
 		$user = User::create(array(
 			'id'           => 1,
 			'username'     => 'admin',
-			'password'     => '$2a$04$BxXsZLfneByzlNzfKuN2PewrNQPa.jK4yafgLsnl48PRAY.61UH.2',
+			'password'     => '$2a$10$e/hyp3AK/lCD8kaH8FZUg.90CifwL5T9XgVHICtfkiyKRdMetCsd2',
 			'user_type_id' => 1
+		));
+
+		$user = User::create(array(
+			'id'           => 2,
+			'username'     => 'notadmin',
+			'password'     => '$2a$10$J7tVAS6/01VcIehRA/EWceUTwAofXUl3cxHWhoIFb/EFkkvIq8vGi',
+			'user_type_id' => 2
 		));
 	}
 }

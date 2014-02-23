@@ -29,5 +29,29 @@ class LocationTableSeeder extends Seeder {
 			'latitude'     => 54.911518,
 			'longitude'    => 23.938715
 		));
+
+		Location::create(array(
+			'user_id'      => 2,
+			'latitude'     => 54.916535,
+			'longitude'    => 23.954122
+		));
+
+		Location::create(array(
+			'user_id'      => 2,
+			'latitude'     => 54.912218,
+			'longitude'    => 23.956161
+		));
+
+		Location::create(array(
+			'user_id'      => 2,
+			'latitude'     => 54.909332,
+			'longitude'    => 23.955259
+		));
+
+		Location::create(array(
+			'user_id'      => 2,
+			'latitude'     => 54.906667,
+			'longitude'    => 23.951397
+		));
 	}
 }
