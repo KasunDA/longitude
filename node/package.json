@@ -21,6 +21,7 @@
   "homepage": "https://github.com/mntnorv/longitude",
   "dependencies": {
     "sequelize": "~1.7.0",
-    "mysql": "~2.1.0"
+    "mysql": "~2.1.0",
+    "lodash": "~2.4.1"
   }
 }
