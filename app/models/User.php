@@ -70,4 +70,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $this->hasMany('ApiToken');
 	}
 
+	public function internalToken() {
+		return $this->apiTokens()->where('internal', '=', true)->first();
+	}
+
 }

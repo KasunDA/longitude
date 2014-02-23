@@ -79,4 +79,18 @@
 		initMap();
 	});
 
+	var sock = new SockJS('http://localhost:9999/');
+	sock.onopen = function() {
+		sock.send(JSON.stringify({
+			type:  'auth',
+			token: API_TOKEN
+		}));
+	};
+	sock.onmessage = function(e) {
+		console.log('message', e.data);
+	};
+	sock.onclose = function() {
+		console.log('close');
+	};
+
 }(jQuery));

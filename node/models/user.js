@@ -1,5 +1,8 @@
 module.exports = function(sequelize, DataTypes) {
-	var User = sequelize.define('User', {}, {
+	var User = sequelize.define('User', {
+		username:     DataTypes.STRING(64),
+		user_type_id: DataTypes.INTEGER(10).UNSIGNED
+	}, {
 		tableName:    'users',
 		underscored:  true,
 		classMethods: {

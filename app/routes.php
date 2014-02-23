@@ -48,10 +48,7 @@ Route::group(array('prefix' => 'api', 'before' => 'auth.api'), function() {
 
 Route::group(array('prefix' => 'tokens'), function() {
 
-	Route::get('new', array('uses' => 'TokenController@newToken',
-		'as' => 'token.new', 'before' => 'auth'));
-
-	Route::get('revoke/{id}', array('uses' => 'TokenController@revokeToken',
-		'as' => 'token.revoke', 'before' => 'auth'));
+	Route::get('refresh/{id}', array('uses' => 'TokenController@refreshToken',
+		'as' => 'token.refresh', 'before' => 'auth'));
 
 });

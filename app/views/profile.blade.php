@@ -20,17 +20,19 @@
 
 		<tbody>
 			@foreach ($apiTokens as $token)
-				<tr>
-					<td>{{ $token->token }}</td>
-					<td style="text-align: right;">
-						<a href="{{route('token.revoke', $token->id)}}" class="btn btn-xs btn-danger">
-							Revoke
-						</a>
-					</td>
-				</tr>
+				@if (!$token->internal)
+					<tr>
+						<td>{{ $token->token }}</td>
+						<td style="text-align: right;">
+							<a href="{{route('token.refresh', $token->id)}}" class="btn btn-xs btn-primary">
+								Refresh
+							</a>
+						</td>
+					</tr>
+				@endif
 			@endforeach
 
-			@if ($apiTokens->isEmpty())
+			@if ($apiTokens->count() == 1)
 				<tr>
 					<td>You have no API tokens</td>
 					<td></td>
@@ -38,10 +40,6 @@
 			@endif
 		</tbody>
 	</table>
-
-	<a href="{{route('token.new')}}" class="btn btn-success">
-		Add API token
-	</a>
 	
 	@include('partials.footer')
 </div>

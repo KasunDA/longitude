@@ -3,16 +3,16 @@ var	path   = require('path'),
 	http   = require('http'),
 	sockjs = require('sockjs');
 
-var server  = http.createServer(),
-	sockets = sockjs.createServer(),
-	clients = {};
+var server    = http.createServer(),
+	sockets   = sockjs.createServer(),
+	clients   = {},
+	usernames = {},
+	admins    = [];
 
-function broadcast(message, exclude) {
+function broadcast(clients, message) {
 	for (var client in clients) {
 		if (clients.hasOwnProperty(client)) {
-			if (client != exclude) {
-				clients[client].write(JSON.stringify(message));
-			}
+			clients[client].write(JSON.stringify(message));
 		}
 	}
 }
@@ -25,18 +25,33 @@ function onConnection(conn) {
 
 		if (data.type == 'auth') {
 			db.ApiToken.find({
-				where: {token: data.token},
+				where: {
+					token:    data.token,
+					internal: true
+				},
 				include: [db.User]
 			}).success(function (token) {
-				conn.data.user = token.user;
-				console.log(user.values);
-				console.log('Successfully authenticated: ' + token.user.username);
+				if (token) {
+					var user = token.values.user.values;
+					conn.data = user;
+					console.log('[auth] Successfully authenticated: ' + user.username);
+
+					usernames[user.username] = conn.id;
+
+					if (user.user_type_id === 1) {
+						admins.push(conn.id);
+					}
+				} else {
+					console.log('[auth] Invalid API token: ' + data.token);
+					conn.close(401, 'Invalid API token');
+				}
 			});
 		}
 	});
 
 	conn.on('close', function() {
 		delete clients[conn.id];
+		delete usernames[conn.id];
 	});
 }
 

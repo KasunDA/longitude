@@ -15,6 +15,8 @@ class UserController extends BaseController {
 			$user->password = Hash::make(Input::get('password'));
 			$user->user_type_id = 2;
 			$user->save();
+
+			$this->generateUserTokens($user);
  
 			return Redirect::route('user.login')
 				->with('flash_message', 'Thanks for registering!')
@@ -41,6 +43,8 @@ class UserController extends BaseController {
 		);
 
 		if (Auth::attempt($userData)) {
+			$this->updateInternalToken(Auth::user());
+
 			return Redirect::route('dashboard')
 				->with('flash_message', 'You are now logged in!')
 				->with('flash_type', 'success');
@@ -54,6 +58,22 @@ class UserController extends BaseController {
 	public function handleLogout() {
 		Auth::logout();
 		return Redirect::route('index');
+	}
+
+	private function updateInternalToken($user) {
+		$token = Auth::user()->internalToken();
+		$token->updateToken();
+		$token->save();
+	}
+
+	private function generateUserTokens($user) {
+		$token = new ApiToken();
+		$token->internal = true;
+		$user->apiTokens()->save($token);
+
+		$token = new ApiToken();
+		$token->internal = false;
+		$user->apiTokens()->save($token);
 	}
 
 }

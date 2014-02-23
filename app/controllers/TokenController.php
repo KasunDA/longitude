@@ -2,22 +2,19 @@
 
 class TokenController extends BaseController {
 
-	public function newToken() {
-		Auth::user()->apiTokens()->save(new ApiToken());
-		return Redirect::route('profile')
-			->with('flash_message', 'Token successfully added')
-			->with('flash_type', 'success');
-	}
+	public function refreshToken($id) {
+		$token = Auth::user()->apiTokens()->find($id);
 
-	public function revokeToken($id) {
-		if (Auth::user()->apiTokens->contains($id)) {
-			ApiToken::destroy($id);
+		if ($token->internal !== TRUE) {
+			$token->updateToken();
+			$token->save();
+
 			return Redirect::route('profile')
-				->with('flash_message', 'Token successfully revoked')
+				->with('flash_message', 'Token successfully updated')
 				->with('flash_type', 'success');
 		} else {
 			return Redirect::route('profile')
-				->with('flash_message', 'Failed to revoke the API token')
+				->with('flash_message', 'Invalid token specified')
 				->with('flash_type', 'error');
 		}
 	}
