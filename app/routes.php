@@ -39,7 +39,7 @@ Route::group(array('prefix' => 'users'), function() {
 
 });
 
-Route::group(array('prefix' => 'api', 'before' => 'auth'), function() {
+Route::group(array('prefix' => 'api', 'before' => 'auth.api'), function() {
 
 	Route::get('locations', array('uses' => 'ApiController@getLocations',
 		'as' => 'api.locations'));

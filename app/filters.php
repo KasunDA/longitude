@@ -44,6 +44,25 @@ Route::filter('auth.basic', function()
 	return Auth::basic();
 });
 
+Route::filter('auth.api', function() {
+	$token = Request::header('X-Api-Token');
+
+	if ($token == null) {
+		return Response::json(array(
+			'error' => 'No API token specified'
+		), 401);
+	}
+
+	$token = ApiToken::where('token', '=', $token)->first();
+	if ($token == null) {
+		return Response::json(array(
+			'error' => 'Invalid API token'
+		), 401);
+	}
+
+	Auth::setUser($token->user);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Guest Filter
