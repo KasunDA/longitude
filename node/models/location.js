@@ -3,8 +3,9 @@ module.exports = function(sequelize, DataTypes) {
 		latitude:  DataTypes.FLOAT(10, 6),
 		longitude: DataTypes.FLOAT(10, 6)
 	}, {
-		tableName:  'locations',
-		timestamps: false,
+		tableName:   'locations',
+		timestamps:  true,
+		underscored: true,
 		classMethods: {
 			associate: function(models) {
 				Location.belongsTo(models.User, {foreignKey: 'user_id'});
