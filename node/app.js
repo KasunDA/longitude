@@ -18,8 +18,6 @@ function broadcast(clients, message) {
 }
 
 function onConnection(conn) {
-	clients[conn.id] = conn;
-
 	conn.on('data', function (data) {
 		data = JSON.parse(data);
 
@@ -32,27 +30,34 @@ function onConnection(conn) {
 				include: [db.User]
 			}).success(function (token) {
 				if (token) {
+					// Get user data
 					var user = token.values.user.values;
 					conn.data = user;
 					console.log('[auth] Successfully authenticated: ' + user.username);
 
+					// Save the connection
+					lients[conn.id] = conn;
 					usernames[user.username] = conn.id;
 
 					if (user.user_type_id === 1) {
 						admins.push(conn.id);
 					}
 
-					conn.write(JSON.stringify({
-						type:      'location',
-						username:  'admin',
-						latitude:  54.904734,
-						longitude: 23.948715
-					}));
+					// conn.write(JSON.stringify({
+					// 	type:      'location',
+					// 	username:  'admin',
+					// 	latitude:  54.904734,
+					// 	longitude: 23.948715
+					// }));
 				} else {
 					console.log('[auth] Invalid API token: ' + data.token);
 					conn.close(401, 'Invalid API token');
 				}
 			});
+		}
+
+		if (data.type == 'newlocation') {
+			console.log('New location: ', data.latitude, data.longitude);
 		}
 	});
 
