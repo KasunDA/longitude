@@ -17,7 +17,29 @@ function broadcast(clients, message) {
 	}
 }
 
+function sendLocation(location, username) {
+	var message      = location;
+	message.type     = 'location';
+	message.username = username;
+
+	var jsonMessage = JSON.stringify(message);
+
+	if (usernames[username]) {
+		var userConn = clients[usernames[username]];
+		if (userConn.data.user_type_id != 1) {
+			userConn.write(jsonMessage);
+		}
+	}
+
+	for (var i = admins.length - 1; i >= 0; i--) {
+		var adminConn = clients[admins[i]];
+		adminConn.write(jsonMessage);
+	}
+}
+
 function onConnection(conn) {
+	console.log('New connection: ', conn.remoteAddress);
+
 	conn.on('data', function (data) {
 		data = JSON.parse(data);
 
@@ -36,19 +58,12 @@ function onConnection(conn) {
 					console.log('[auth] Successfully authenticated: ' + user.username);
 
 					// Save the connection
-					lients[conn.id] = conn;
+					clients[conn.id] = conn;
 					usernames[user.username] = conn.id;
 
 					if (user.user_type_id === 1) {
 						admins.push(conn.id);
 					}
-
-					// conn.write(JSON.stringify({
-					// 	type:      'location',
-					// 	username:  'admin',
-					// 	latitude:  54.904734,
-					// 	longitude: 23.948715
-					// }));
 				} else {
 					console.log('[auth] Invalid API token: ' + data.token);
 					conn.close(401, 'Invalid API token');
@@ -56,8 +71,14 @@ function onConnection(conn) {
 			});
 		}
 
-		if (data.type == 'newlocation') {
+		if (conn.remoteAddress == '127.0.0.1' && data.type == 'newlocation') {
 			console.log('New location: ', data.latitude, data.longitude);
+			var location = {
+				latitude:  data.latitude,
+				longitude: data.longitude
+			};
+			var username = data.username;
+			sendLocation(location, username);
 		}
 	});
 

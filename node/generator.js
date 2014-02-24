@@ -23,10 +23,12 @@ function generateLocations() {
 				user_id:   users[i].id
 			};
 
-			//var location = db.Location.build(locationData);
-			//location.save();
+			var location = db.Location.build(locationData);
+			location.save();
 
 			locationData.type = 'newlocation';
+			locationData.username = users[i].username;
+
 			sendMessage(locationData);
 		};
 
@@ -60,6 +62,6 @@ db
 		if (!!err) {
 			console.log('Unable to connect to the database:', err);
 		} else {
-			generator = setInterval(generateLocations, 1000);
+			generator = setInterval(generateLocations, 5000);
 		}
 	});
