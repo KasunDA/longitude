@@ -49,7 +49,7 @@ class UserController extends BaseController {
 				->with('flash_message', 'You are now logged in!')
 				->with('flash_type', 'success');
 		} else {
-			return Redirect::route('users.login')
+			return Redirect::route('user.login')
 				->with('incorrect_login', true)
 				->withInput();
 		}

@@ -1,0 +1,59 @@
+#main-container {
+	position: relative;
+	
+	padding-top: 100px;
+	padding-bottom: 100px;
+	background-color: #225BCC;
+	
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	
+	color: white;
+	text-align: center;
+}
+
+#home-sign-in-btn {
+	color: white;
+	font-weight: bold;
+}
+
+#home-logo {
+	margin-bottom: 50px;
+}
+
+#main-container .btn {
+	background-color: transparent;
+	border-color: white;
+}
+
+#main-container .btn:hover {
+	background-color: white;
+	color: #428BCA;
+}
+
+#register-btn {
+	margin-top: 30px;
+}
+
+.title {
+  font-size: 100px;
+  line-height: 80px;
+}
+
+.subtitle {
+	font-size: 20px;
+}
+
+.feature-title {
+	font-size: 40px;
+}
+
+.feature-subtitle {
+	font-size: 19px;
+	max-width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	color: #333;
+	margin-bottom: 30px;
+}

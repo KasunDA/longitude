@@ -27,6 +27,13 @@
 
 	<?= stylesheet_link_tag() ?>
 	<?= javascript_include_tag() ?>
+
+	<!-- Image styles -->
+	<style type="text/css">
+		#main-container {
+			background-image: url({{ url("/") }}/assets/map_dots.png);
+		}
+	</style>
 </head>
 <body>
 	@include('partials.navigation')
