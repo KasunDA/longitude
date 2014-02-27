@@ -9,27 +9,66 @@ var generator,
 	client   = new WebSocketClient();
 
 function sendMessage(message) {
-	if (conn.connected) {
+	if (conn && conn.connected) {
 		conn.sendUTF(JSON.stringify(message));
 	}
 }
 
+function generateLocation(user) {
+	var latitude;
+	var longitude;
+
+	if (user.locations.length > 0) {
+		var longitudeDiff = 0;
+		var latitudeDiff  = 0;
+
+		var length = user.locations.length;
+		var last   = user.locations[length - 1].values;
+
+		if (user.locations.length > 1) {
+			var secondToLast = user.locations[length - 2].values;
+
+			var rotation = Math.atan2(last.latitude - secondToLast.latitude, last.longitude - secondToLast.longitude);
+			var rotationDiff = (Math.random() - 0.5) * 0.3;
+			rotation = rotation + rotationDiff;
+
+			console.log(rotation, rotationDiff);
+
+			var movedAmount = Math.random() * 0.001;
+
+			latitudeDiff  = movedAmount * Math.sin(rotation);
+			longitudeDiff = movedAmount * Math.cos(rotation);
+		} else if (user.locations.length == 1) {
+			latitudeDiff  = (Math.random() * 0.001) - 0.0005;
+			longitudeDiff = (Math.random() * 0.001) - 0.0005;
+		}
+
+		latitude  = last.latitude + latitudeDiff;
+		longitude = last.longitude + longitudeDiff;
+	} else {
+		latitude  = base_lat + ((Math.random() * 0.01) - 0.005);
+		longitude = base_lng + ((Math.random() * 0.01) - 0.005);
+	}
+
+	return {
+		latitude:  latitude,
+		longitude: longitude
+	};
+}
+
 function generateLocations() {
-	db.User.findAll().success(function (users) {
+	db.User.findAll({include: [db.Location]}).success(function (users) {
 		for (var i = users.length - 1; i >= 0; i--) {
-			var locationData = {
-				latitude:  base_lat + ((Math.random() * 0.06) - 0.03),
-				longitude: base_lng + ((Math.random() * 0.06) - 0.03),
-				user_id:   users[i].id
-			};
+			var location = generateLocation(users[i]);
 
-			var location = db.Location.build(locationData);
-			location.save();
+			var locationData = location;
+			locationData['user_id'] = users[i].id;
+			db.Location.build(locationData).save();
 
-			locationData.type = 'newlocation';
-			locationData.username = users[i].username;
-
-			sendMessage(locationData);
+			var message = location;
+			message.type = 'newlocation';
+			message.username = users[i].username;
+			sendMessage(message);
 		};
 
 		console.log('Generated locations.');
@@ -62,6 +101,6 @@ db
 		if (!!err) {
 			console.log('Unable to connect to the database:', err);
 		} else {
-			generator = setInterval(generateLocations, 5000);
+			generator = setInterval(generateLocations, 1000);
 		}
 	});
